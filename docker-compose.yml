@@ -1,0 +1,22 @@
+services:
+  code-review-mcp:
+    image: code-review-mcp:latest
+    build:
+      context: .
+      args:
+        LLM_API_KEY: ${LLM_API_KEY}
+        LLM_BASE_URL: ${LLM_BASE_URL}
+        LLM_MODEL: ${LLM_MODEL}
+    container_name: code-review-mcp
+    environment:
+      - LLM_BASE_URL=${LLM_BASE_URL}
+      - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_MODEL=${LLM_MODEL}
+      - WORKSPACE_DIR=/workspace
+    volumes:
+      # Mount your project directory here
+      - ${PROJECT_DIR:-./example-project}:/workspace:rw
+    stdin_open: true
+    tty: true
+    # MCP uses stdio, so we need interactive mode
+    command: uv run server.py
