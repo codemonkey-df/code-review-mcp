@@ -97,3 +97,25 @@ def x():
     assert func_section.name == "x"
     assert "def y()" in func_section.text
     assert "def x()" in func_section.text
+
+
+def test_python_async_def_as_separate_section() -> None:
+    """Top-level async def is parsed as a function section with correct name."""
+    content = """
+import os
+
+def sync_main():
+    pass
+
+async def fetch_data():
+    return await get()
+"""
+    sections = parse_sections(content.strip(), Path("test.py"))
+    assert len(sections) >= 3
+    funcs = [s for s in sections if s.kind == "function"]
+    assert len(funcs) == 2
+    names = {s.name for s in funcs}
+    assert names == {"sync_main", "fetch_data"}
+    async_section = next(s for s in funcs if s.name == "fetch_data")
+    assert "async def fetch_data" in async_section.text
+    assert async_section.identifier.startswith("function fetch_data")
