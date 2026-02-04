@@ -110,6 +110,24 @@ async def foo():
     assert "async def foo" in func_section.text
 
 
+def test_python_async_def_with_decorators() -> None:
+    """Test that async def with decorators is detected and decorators are included in section."""
+    content = """
+@router.get("/items")
+@cache(ttl=60)
+async def get_items():
+    return []
+"""
+    sections = parse_sections(content.strip(), Path("test.py"))
+
+    func_section = next(s for s in sections if s.kind == "function")
+    assert func_section.name == "get_items"
+    assert "async def get_items" in func_section.text
+    assert "@router.get" in func_section.text
+    assert "@cache" in func_section.text
+    assert func_section.start_line == 1
+
+
 def test_js_async_function() -> None:
     """Test that async function is detected and JSDoc/decorators included."""
     content = """

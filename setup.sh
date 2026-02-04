@@ -117,19 +117,14 @@ fi
 
 echo ""
 
-# Build image only if it does not exist
-if docker image inspect "$IMAGE_NAME" &> /dev/null; then
-    echo -e "${GREEN}✓ Docker image $IMAGE_NAME already exists${NC}"
-    echo "  (Run: $COMPOSE_CMD build --no-cache to force a rebuild)"
+# Always build image with no cache so we get a fresh build each time
+echo "Building Docker image $IMAGE_NAME (--no-cache)..."
+$COMPOSE_CMD build --no-cache
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✓ Docker image built successfully${NC}"
 else
-    echo "Building Docker image $IMAGE_NAME..."
-    $COMPOSE_CMD build
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✓ Docker image built successfully${NC}"
-    else
-        echo -e "${RED}✗ Failed to build Docker image${NC}"
-        exit 1
-    fi
+    echo -e "${RED}✗ Failed to build Docker image${NC}"
+    exit 1
 fi
 
 echo ""

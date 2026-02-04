@@ -20,14 +20,11 @@ REVIEW PRIORITIES (high to low):
 6. Error Handling - exceptions, recovery, logging
 
 CODE STANDARDS:
-- Follow PEP 8.
-- Max line length: 120 characters.
-- Max function length: 50 lines; if longer, recommend breaking into smaller, focused functions.
+- Apply PEP 8 for structure and naming; use max line length 120 and max function length 50 lines (recommend splitting if longer).
 - Apply SOLID principles; if a class or function does too much, suggest splitting it (Single Responsibility).
 
-DE-PRIORITIZE: Formatting, style-only issues (spacing, quotes) beyond the above.
-State "tools can automate these" and avoid requesting changes unless they affect
-readability or consistency meaningfully.
+DE-PRIORITIZE: Style-only formatting (spacing, quotes, minor PEP 8 nitpicks). State "tools can automate these"
+and avoid requesting changes unless they affect readability or consistency meaningfully.
 
 FEEDBACK STYLE:
 - Be specific and constructive
@@ -55,9 +52,11 @@ FILE CONTENT:
 Provide your review as specific line-by-line comments using this format:
 [LINE X] TYPE: Your comment here
 
-You may continue a comment on the next lines; only use a new "[LINE N]" when starting a comment for a different line. Where TYPE is one of: CRITICAL, SUGGESTION, QUESTION, PRAISE
+You may continue a comment on the next lines; only use a new "[LINE N]" when starting a comment for a different line. 
+Where TYPE is one of: CRITICAL, SUGGESTION, QUESTION, PRAISE
 
-Focus on the priorities listed above. Be specific, explain your reasoning, and provide actionable suggestions.
+Focus on the priorities and CODE STANDARDS above (PEP 8, line length 120, function length ≤50 lines, SOLID). 
+Be specific, explain your reasoning, and provide actionable suggestions. Always check and comment on CODE STANDARDS violations when present.
 """
 
 
@@ -96,13 +95,17 @@ do NOT output REQUEST_CONTEXT.
 Provide your review as specific line-by-line comments:
 [LINE X] TYPE: Your comment here
 
-You may continue a comment on the next lines; only use a new "[LINE N]" when starting a comment for a different line. Where TYPE is one of: CRITICAL, SUGGESTION, QUESTION, PRAISE.
+You may continue a comment on the next lines; only use a new "[LINE N]" when starting a comment for a different line. 
+Where TYPE is one of: CRITICAL, SUGGESTION, QUESTION, PRAISE.
 
-Focus on the priorities listed above. Be specific and actionable.
+Focus on the priorities and CODE STANDARDS above (PEP 8, line length 120, function length ≤50 lines, SOLID). 
+Be specific and actionable. Always check and comment on CODE STANDARDS violations when present.
 """
 
 
 SECTION_CONTEXT_FOLLOWUP_PROMPT = """You are continuing your review of a section with additional context.
+
+{priorities}
 
 FILE: {file_path}
 
@@ -125,7 +128,8 @@ Do NOT output REQUEST_CONTEXT again.
 Provide your review as:
 [LINE X] TYPE: Your comment here
 
-You may continue a comment on the next lines; only use a new "[LINE N]" when starting a comment for a different line. Focus on how this context affects your review of the current section.
+You may continue a comment on the next lines; only use a new "[LINE N]" when starting a comment for a different line. 
+Focus on the priorities and CODE STANDARDS above and how this context affects your review of the current section.
 """
 
 
@@ -230,6 +234,7 @@ def build_section_context_followup_prompt(
         Complete prompt string for follow-up review.
     """
     return SECTION_CONTEXT_FOLLOWUP_PROMPT.format(
+        priorities=REVIEW_PRIORITIES,
         file_path=str(file_path),
         section_kind=section_context["section_kind"],
         section_name=section_context["section_name"],
