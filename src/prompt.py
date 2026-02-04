@@ -19,8 +19,14 @@ REVIEW PRIORITIES (high to low):
 5. Performance - algorithms, I/O, unnecessary work
 6. Error Handling - exceptions, recovery, logging
 
-DE-PRIORITIZE: Formatting, style-only issues (spacing, quotes, line length).
-State "tools can automate these" and avoid requesting changes unless they affect 
+CODE STANDARDS:
+- Follow PEP 8.
+- Max line length: 120 characters.
+- Max function length: 50 lines; if longer, recommend breaking into smaller, focused functions.
+- Apply SOLID principles; if a class or function does too much, suggest splitting it (Single Responsibility).
+
+DE-PRIORITIZE: Formatting, style-only issues (spacing, quotes) beyond the above.
+State "tools can automate these" and avoid requesting changes unless they affect
 readability or consistency meaningfully.
 
 FEEDBACK STYLE:
